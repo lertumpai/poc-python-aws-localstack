@@ -1,5 +1,4 @@
 import aioboto3
-import asyncio
 import os
 
 # Set your AWS credentials
@@ -8,11 +7,11 @@ AWS_ACCESS_KEY_ID = 'mock'
 AWS_SECRET_ACCESS_KEY = 'mock'
 AWS_REGION = 'ap-southeast-1'
 BUCKET_NAME = 'poc-s3-bucket'
-UPLOAD_KEY = 'multipart_key_6'
-FILE_PATH = './IMG_0012.MOV'
+UPLOAD_KEY = 'multipart_key'
+FILE_PATH = '../IMG_0012.MOV'
 
 
-class s3Client:
+class S3Client:
     def __init__(self):
         self.s3 = None
         self.upload_id = None
@@ -45,6 +44,7 @@ class s3Client:
                 PartNumber=part_number,
                 UploadId=self.upload_id
             )
+
             print("done upload part", part_number)
             return {'PartNumber': part_number, 'ETag': response['ETag']}
 
@@ -63,50 +63,5 @@ class s3Client:
                 MultipartUpload={'Parts': parts},
                 UploadId=self.upload_id
             )
+            self.upload_id = None
             return response
-
-
-async def main():
-    s3 = s3Client()
-    await s3.create_multipart_upload()
-
-    # Set the part size (5MB in this example)
-    part_size = 100 * 1024 * 1024
-    part_number = 1
-    parts = []
-
-    upload_parts = []
-
-    # Open the file
-    with open(FILE_PATH, 'rb') as file:
-        while True:
-            # Read a part of the file
-            data = file.read(part_size)
-
-            if not data:
-                break
-
-            # create list of upload the part
-            upload_parts.append(
-                s3.upload_part(
-                    part_number=part_number,
-                    data=data
-                )
-            )
-            part_number += 1
-
-    # await all upload part and gather results
-    results = await asyncio.gather(*upload_parts)
-
-    # Store the ETag for later use
-    for result in results:
-        parts.append(result)
-
-    await s3.complete_multipart_upload(
-        parts=parts
-    )
-
-    print("Done...")
-
-
-asyncio.run(main())
