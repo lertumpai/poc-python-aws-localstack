@@ -1,14 +1,17 @@
 import aioboto3
+from dotenv import load_dotenv
 import os
 
-# Set your AWS credentials
-ENDPOINT_URL = 'http://localhost:4566'
-AWS_ACCESS_KEY_ID = 'mock'
-AWS_SECRET_ACCESS_KEY = 'mock'
-AWS_REGION = 'ap-southeast-1'
-BUCKET_NAME = 'poc-s3-bucket'
-UPLOAD_KEY = 'multipart_key'
-FILE_PATH = '../IMG_0012.MOV'
+load_dotenv()
+
+# get env
+ENDPOINT_URL = os.getenv('ENDPOINT_URL')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_REGION = os.getenv('AWS_REGION')
+BUCKET_NAME = os.getenv('BUCKET_NAME')
+UPLOAD_KEY = os.getenv('UPLOAD_KEY')
+FILE_PATH = os.getenv('FILE_PATH')
 
 
 class S3Client:
