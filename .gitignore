@@ -1,1 +1,10 @@
 IMG_0012.MOV
+
+venv
+
+volume
+
+tf/.terraform
+tf/.terraform.lock.hcl
+tf/terraform.tfstate
+tf/terraform.tfstate.backup
