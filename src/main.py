@@ -4,7 +4,7 @@ import os
 from s3_multipart_async import S3Client
 from upload_file_to_s3 import UploadFileToS3
 
-FILE_PATH = '../IMG_0012.MOV'
+FILE_PATH = '/Users/sorawitlertumpaisakulwong/Desktop/poc-python-aws-localstack/IMG_0012.MOV'
 
 
 async def main():
