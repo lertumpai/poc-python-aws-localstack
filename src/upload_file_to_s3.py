@@ -2,6 +2,7 @@ import asyncio
 import os
 
 from s3_multipart_async import S3Client
+from config import env
 
 
 class UploadFileToS3:
@@ -9,8 +10,8 @@ class UploadFileToS3:
         self.s3 = s3
 
     async def execute(self, file_path=""):
-        await self.s3.create_multipart_upload()  # Set the part size (5MB in this example)
-        part_size = 100 * 1024 * 1024
+        await self.s3.create_multipart_upload()
+        part_size = int(env["PART_SIZE_IN_MB"]) * 1024 * 1024
         part_number = 1
         parts = []
         upload_parts = []

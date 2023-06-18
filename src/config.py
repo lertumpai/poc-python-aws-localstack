@@ -10,5 +10,6 @@ env = {
     "AWS_REGION": os.getenv('AWS_REGION'),
     "BUCKET_NAME": os.getenv('BUCKET_NAME'),
     "UPLOAD_KEY": os.getenv('UPLOAD_KEY'),
-    "FILE_PATH": os.getenv('FILE_PATH')
+    "FILE_PATH": os.getenv('FILE_PATH'),
+    "PART_SIZE_IN_MB": os.getenv('PART_SIZE_IN_MB')
 }
