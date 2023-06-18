@@ -11,5 +11,6 @@ env = {
     "BUCKET_NAME": os.getenv('BUCKET_NAME'),
     "UPLOAD_KEY": os.getenv('UPLOAD_KEY'),
     "FILE_PATH": os.getenv('FILE_PATH'),
-    "PART_SIZE_IN_MB": os.getenv('PART_SIZE_IN_MB')
+    "PART_SIZE_IN_MB": os.getenv('PART_SIZE_IN_MB'),
+    "QUEUE_URL": os.getenv('QUEUE_URL')
 }
