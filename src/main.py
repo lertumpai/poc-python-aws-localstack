@@ -1,16 +1,13 @@
 import asyncio
 import os
 
-from s3_multipart_async import S3Client
-from upload_file_to_s3 import UploadFileToS3
+from upload_file_to_s3 import upload_file_to_s3
 
 FILE_PATH = '/Users/sorawitlertumpaisakulwong/Desktop/poc-python-aws-localstack/IMG_0012.MOV'
 
 
 async def main():
-    s3 = S3Client()
-    upload_file = UploadFileToS3(s3=s3)
-    await upload_file.execute(file_path=FILE_PATH)
+    await upload_file_to_s3(file_path=FILE_PATH)
 
 
 asyncio.run(main())
