@@ -1,17 +1,6 @@
 import aioboto3
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
-
-# get env
-ENDPOINT_URL = os.getenv('ENDPOINT_URL')
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_REGION = os.getenv('AWS_REGION')
-BUCKET_NAME = os.getenv('BUCKET_NAME')
-UPLOAD_KEY = os.getenv('UPLOAD_KEY')
-FILE_PATH = os.getenv('FILE_PATH')
+from config import env
 
 
 class S3Client:
@@ -22,12 +11,12 @@ class S3Client:
     async def create_multipart_upload(self):
         async with aioboto3.Session().client(
                 service_name='s3',
-                endpoint_url=ENDPOINT_URL,
-                region_name=AWS_REGION,
-                aws_access_key_id=AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+                endpoint_url=env["ENDPOINT_URL"],
+                region_name=env["AWS_REGION"],
+                aws_access_key_id=env["AWS_ACCESS_KEY_ID"],
+                aws_secret_access_key=env["AWS_SECRET_ACCESS_KEY"]
         ) as s3:
-            response = await s3.create_multipart_upload(Bucket=BUCKET_NAME, Key=UPLOAD_KEY)
+            response = await s3.create_multipart_upload(Bucket=env["BUCKET_NAME"], Key=env["UPLOAD_KEY"])
             self.upload_id = response['UploadId']
 
     async def upload_part(self, part_number, data):
@@ -35,15 +24,15 @@ class S3Client:
 
         async with aioboto3.Session().client(
                 service_name='s3',
-                endpoint_url=ENDPOINT_URL,
-                region_name=AWS_REGION,
-                aws_access_key_id=AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+                endpoint_url=env["ENDPOINT_URL"],
+                region_name=env["AWS_REGION"],
+                aws_access_key_id=env["AWS_ACCESS_KEY_ID"],
+                aws_secret_access_key=env["AWS_SECRET_ACCESS_KEY"]
         ) as s3:
             response = await s3.upload_part(
                 Body=data,
-                Bucket=BUCKET_NAME,
-                Key=UPLOAD_KEY,
+                Bucket=env["BUCKET_NAME"],
+                Key=env["UPLOAD_KEY"],
                 PartNumber=part_number,
                 UploadId=self.upload_id
             )
@@ -55,14 +44,14 @@ class S3Client:
         # Complete the multipart upload
         async with aioboto3.Session().client(
                 service_name='s3',
-                endpoint_url=ENDPOINT_URL,
-                region_name=AWS_REGION,
-                aws_access_key_id=AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+                endpoint_url=env["ENDPOINT_URL"],
+                region_name=env["AWS_REGION"],
+                aws_access_key_id=env["AWS_ACCESS_KEY_ID"],
+                aws_secret_access_key=env["AWS_SECRET_ACCESS_KEY"]
         ) as s3:
             response = await s3.complete_multipart_upload(
-                Bucket=BUCKET_NAME,
-                Key=UPLOAD_KEY,
+                Bucket=env["BUCKET_NAME"],
+                Key=env["UPLOAD_KEY"],
                 MultipartUpload={'Parts': parts},
                 UploadId=self.upload_id
             )
