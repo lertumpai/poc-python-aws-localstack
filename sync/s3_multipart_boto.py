@@ -5,7 +5,7 @@ from config import env
 
 
 def upload_progress_callback(bytes_transferred):
-    print(f"Uploaded {bytes_transferred / 1024} mb")
+    print(f"Uploaded {(bytes_transferred / 1024) / 1024} mb")
 
 
 def upload_large_file_to_s3(bucket_name, file_path, key_name):
@@ -20,8 +20,8 @@ def upload_large_file_to_s3(bucket_name, file_path, key_name):
 
     config = TransferConfig(
         max_concurrency=5,
-        multipart_threshold=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
         multipart_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
+        io_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
         use_threads=True
     )
 
