@@ -17,7 +17,8 @@ def upload_progress_callback(bytes_transferred):
 
     transferred_mb = (bytes_transferred / 1024) / 1024
     progress_upload_mb += transferred_mb
-    print(f"Upload {filename}: progress {progress_upload_mb} / {file_size_mb} mb")
+    progress_percent = progress_upload_mb / file_size_mb * 100
+    print(f"Upload {filename}: progress {progress_percent:.2f} / 100.00 %")
 
 
 def upload_large_file_to_s3(file_path, upload_key):
