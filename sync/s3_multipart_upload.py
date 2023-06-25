@@ -18,7 +18,11 @@ def upload_progress_callback(bytes_transferred):
     transferred_mb = (bytes_transferred / 1024) / 1024
     progress_upload_mb += transferred_mb
     progress_percent = progress_upload_mb / file_size_mb * 100
-    print(f"Upload {filename}: progress {progress_percent:.2f} / 100.00 %")
+
+    if progress_percent == 100:
+        print(f"Upload {filename}: progress {progress_percent:.2f} / 100.00 %")
+    else:
+        print(f"Upload {filename}: progress {progress_percent:.2f} / 100.00 %", end="\r")
 
 
 def upload_large_file_to_s3(file_path, upload_key):
@@ -28,6 +32,8 @@ def upload_large_file_to_s3(file_path, upload_key):
     file_size = os.path.getsize(file_path)
     filename = os.path.basename(file_path)
     file_size_mb = file_size / 1024 / 1024
+
+    print(f"Start upload {filename}")
 
     s3 = boto3.client(
         's3',
@@ -52,6 +58,8 @@ def upload_large_file_to_s3(file_path, upload_key):
         Config=config,
         Callback=upload_progress_callback
     )
+
+    print(f"Finish upload {filename}")
 
 
 # Example usage
