@@ -5,12 +5,25 @@ from boto3.s3.transfer import TransferConfig
 
 from config import env
 
+progress_upload_mb = 0
+file_size_mb = 0
+
 
 def upload_progress_callback(bytes_transferred):
-    print(f"Uploaded {(bytes_transferred / 1024) / 1024} mb")
+    global progress_upload_mb
+    global file_size_mb
+
+    transferred_mb = (bytes_transferred / 1024) / 1024
+    progress_upload_mb += transferred_mb
+    print(f"Uploaded {progress_upload_mb} / {file_size_mb} mb")
 
 
 def upload_large_file_to_s3(bucket_name, file_path, key_name):
+    global file_size_mb
+
+    file_size = os.path.getsize(file_path)
+    file_size_mb = file_size / 1024 / 1024
+
     s3 = boto3.client(
         's3',
         endpoint_url=env["ENDPOINT_URL"],
@@ -20,12 +33,10 @@ def upload_large_file_to_s3(bucket_name, file_path, key_name):
 
     )
 
-    file_size = os.path.getsize(file_path)
-
     config = TransferConfig(
-        max_concurrency=5,
+        max_concurrency=1,
         multipart_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
-        io_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
+        # io_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
         use_threads=True
     )
 
