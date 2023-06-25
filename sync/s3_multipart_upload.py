@@ -7,21 +7,25 @@ from config import env
 
 progress_upload_mb = 0
 file_size_mb = 0
+filename = ""
 
 
 def upload_progress_callback(bytes_transferred):
     global progress_upload_mb
     global file_size_mb
+    global filename
 
     transferred_mb = (bytes_transferred / 1024) / 1024
     progress_upload_mb += transferred_mb
-    print(f"Uploaded {progress_upload_mb} / {file_size_mb} mb")
+    print(f"Upload {filename}: progress {progress_upload_mb} / {file_size_mb} mb")
 
 
 def upload_large_file_to_s3(file_path, upload_key):
     global file_size_mb
+    global filename
 
     file_size = os.path.getsize(file_path)
+    filename = os.path.basename(file_path)
     file_size_mb = file_size / 1024 / 1024
 
     s3 = boto3.client(
