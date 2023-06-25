@@ -20,6 +20,7 @@ def upload_large_file_to_s3(bucket_name, file_path, key_name):
 
     config = TransferConfig(
         max_concurrency=5,
+        multipart_threshold=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
         multipart_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
         use_threads=True
     )
