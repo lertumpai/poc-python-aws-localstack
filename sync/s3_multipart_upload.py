@@ -1,3 +1,5 @@
+import os
+
 import boto3
 from boto3.s3.transfer import TransferConfig
 
@@ -18,6 +20,8 @@ def upload_large_file_to_s3(bucket_name, file_path, key_name):
 
     )
 
+    file_size = os.path.getsize(file_path)
+
     config = TransferConfig(
         max_concurrency=5,
         multipart_chunksize=int(env["PART_SIZE_IN_MB"]) * 1024 * 1024,
@@ -27,9 +31,9 @@ def upload_large_file_to_s3(bucket_name, file_path, key_name):
 
     # Upload the file
     s3.upload_file(
-        file_path,
-        bucket_name,
-        key_name,
+        Filename=file_path,
+        Bucket=bucket_name,
+        Key=key_name,
         Config=config,
         Callback=upload_progress_callback
     )
